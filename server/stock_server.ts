@@ -1,4 +1,5 @@
 import * as express from 'express'
+import {Server} from 'ws'
 
 const app = express();
 
@@ -12,9 +13,26 @@ app.get('/api/stock/:id',(req,res) => {
   res.json(stocks.find((stock) => stock.id == req.params.id))
 })
 
+//http-server
 const server = app.listen(8080,'localhost',() => {
   console.log('服务器已启动，地址是http://localhost:8080/')
 })
+//ws-server
+const wsServer = new Server({port:8081});
+wsServer.on('connection',websocket => {
+  websocket.send('欢迎连接服务器.')
+  websocket.on('message',message => {
+    console.log('接收到客户端发来的消息，消息内容是： '+message)
+  })
+})
+
+setInterval(() => {
+  if(wsServer.clients){
+    wsServer.clients.forEach(client =>{
+      client.send('这是定时推送的消息')
+    })
+  }
+},2000)
 
 export class Stock{
   constructor(public id:number,

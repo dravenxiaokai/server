@@ -11,6 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^8.0.15",
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "ws": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^3.0.2"
   }
 }

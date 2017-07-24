@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var ws_1 = require("ws");
 var app = express();
 app.get('/', function (req, res) { return res.send('这里是首页!!!'); });
 app.get('/api/stock', function (req, res) {
@@ -9,9 +10,25 @@ app.get('/api/stock', function (req, res) {
 app.get('/api/stock/:id', function (req, res) {
     res.json(stocks.find(function (stock) { return stock.id == req.params.id; }));
 });
+//http-server
 var server = app.listen(8080, 'localhost', function () {
     console.log('服务器已启动，地址是http://localhost:8080/');
 });
+//ws-server
+var wsServer = new ws_1.Server({ port: 8081 });
+wsServer.on('connection', function (websocket) {
+    websocket.send('欢迎连接服务器.');
+    websocket.on('message', function (message) {
+        console.log('接收到客户端发来的消息，消息内容是： ' + message);
+    });
+});
+setInterval(function () {
+    if (wsServer.clients) {
+        wsServer.clients.forEach(function (client) {
+            client.send('这是定时推送的消息');
+        });
+    }
+}, 2000);
 var Stock = (function () {
     function Stock(id, name, price, rating, desc, categories) {
         this.id = id;
