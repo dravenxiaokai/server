@@ -1,0 +1,2 @@
+# server
+用typescript搭建nodejs(express)服务端环境,需要配置tsconfig.json,sublime text下要命令行手动运行tsc,如果用webstorm之类的强大的IDE，勾选一下use tsconfig.json可以自动编译成js文件
